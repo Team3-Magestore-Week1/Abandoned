@@ -49,15 +49,11 @@ class Magestore_Abandoned_Model_System_Config_Email_Template extends Varien_Obje
         array_unshift(
             $options,
             array(
-                'value'=> 'magestore_auction_completed_admin',
-                'label' => 'New bid notice to admin (Default)'
-            ),
-            array(
-                'value'=> '0',
-                'label' => 'None'
+                'value'=> 'magestore_abandoned_remind',
+                'label' => 'Remind email template (Default)'
             )
         );		
 		
-		return $options;
+        return $options;
     }
 }

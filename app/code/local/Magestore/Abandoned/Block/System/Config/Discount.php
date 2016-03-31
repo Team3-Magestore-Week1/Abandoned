@@ -39,7 +39,15 @@ class Magestore_Abandoned_Block_System_Config_Discount extends Mage_Adminhtml_Bl
         
         $disable = $columnName=='number'?'readonly':'';
         $class = $columnName=='number'?'input-text number-discount':'input-text';
-        $template = Mage::getModel('');
+        $templates = Mage::getModel('abandoned/system_config_email_template')->toOptionArray();
+        $html = '';
+        foreach($templates as $item){
+            $html.='<option value="'.$item['value'].'">'.$item['label'].'</option>';
+        }
+        if($columnName=='email_template')
+            return '<select class="select" name="' . $inputName . '" > value="#{' . $columnName . '}" ' 
+                . $html
+                . '</select>';
         
         return '<input '.$disable.' type="text" name="' . $inputName . '" value="#{' . $columnName . '}" ' .
             ($column['size'] ? 'size="' . $column['size'] . '"' : '') . ' class="'.$class.'"'.
