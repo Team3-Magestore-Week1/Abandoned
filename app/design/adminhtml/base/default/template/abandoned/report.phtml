@@ -1,0 +1,55 @@
+<div id="anchor-content" class="middle">
+    <div id="page:main-container">
+        <div class="content-header">
+            <table cellspacing="0">
+                <tbody>
+                    <tr>
+                        <td style="width:50%;">
+                            <h3 class="icon-head head-adminhtml-banner">
+                                <?php echo $this->__('Abandoned Report') ?>
+                            </h3>
+                        </td>
+                        <td class="form-buttons">
+                            <button style="" onclick="showAbandonedReport()" class="scalable add"
+                                    type="button" title="<?php echo $this->__("Show Report") ?>" id="abandoned_report_btn">
+                                <span>
+                                    <span>
+                                        <span><?php echo $this->__("Show Report") ?></span>
+                                    </span>
+                                </span>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div>
+            <?php echo $this->getChildHtml('report_filter'); ?>
+        </div>
+        <div id="chart_div" class="report-content clear report-chart">
+            <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+            <script>google.charts.load('current', {'packages': ['corechart']});</script>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var FORM_KEY = '<?php echo Mage::getSingleton('core/session')->getFormKey() ?>';
+    function showAbandonedReport(){
+        var filterForm = new varienForm('filter_form', '');
+        if(!filterForm.validate())
+            return;
+        var params = Form.serializeElements($('filter_form')
+                .select('input', 'select', 'textarea'), true);
+        
+        params.form_key = FORM_KEY;
+        new Ajax.Request(reportUrl,{
+            parameters :params,
+            method :'post',
+            area :$(this.idPrefix + 'simple_form'),
+            onComplete : function(xhr){
+                
+            }
+        })
+    }
+</script>
+    

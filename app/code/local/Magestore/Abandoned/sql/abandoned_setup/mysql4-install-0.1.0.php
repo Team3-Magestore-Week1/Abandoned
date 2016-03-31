@@ -40,10 +40,11 @@ CREATE TABLE {$this->getTable('abandoned/abandoned')} (
   `is_success` SMALLINT(3) NOT NULL DEFAULT 0,
   `quote_base_grand_total` DECIMAL(12,4) NULL,
   `abandoned_base_discount` DECIMAL(12,4) NULL,
-  `quote_customer_name` VARCHAR(255) NULL,
-  `quote_customer_email` VARCHAR(255) NULL,
+  `quote_customer_name` varchar(255) NULL,
+  `quote_customer_email` varchar(255) NULL,
   `quote_created_at` DATETIME NULL,
   `quote_updated_at` DATETIME NULL,
+  `order_success_time` DATETIME NULL,
   PRIMARY KEY (`abandoned_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

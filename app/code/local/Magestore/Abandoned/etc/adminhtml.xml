@@ -31,9 +31,14 @@
                     <sort_order>0</sort_order>
                     <action>adminhtml/abandoned_index/index</action>
                 </grid>
+                <report module="abandoned" translate="title">
+                    <title>Report</title>
+                    <sort_order>1</sort_order>
+                    <action>adminhtml/abandoned_report/index</action>
+                </report>
                 <settings module="abandoned" translate="title">
                     <title>Settings</title>
-                    <sort_order>1</sort_order>
+                    <sort_order>2</sort_order>
                     <action>adminhtml/system_config/edit/section/abandoned</action>
                 </settings>
             </children>
@@ -66,9 +71,13 @@
                                 <title>Abandoned</title>
                                 <sort_order>0</sort_order>
                             </grid>
+                            <report module="abandoned" translate="title">
+                                <title>Report</title>
+                                <sort_order>1</sort_order>
+                            </report>
                             <settings module="abandoned" translate="title">
                                 <title>Settings</title>
-                                <sort_order>1</sort_order>
+                                <sort_order>2</sort_order>
                             </settings>
                         </children>
                     </abandoned>

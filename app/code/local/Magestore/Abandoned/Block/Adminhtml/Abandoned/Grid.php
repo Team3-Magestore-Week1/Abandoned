@@ -26,57 +26,57 @@ class Magestore_Abandoned_Block_Adminhtml_Abandoned_Grid extends Mage_Adminhtml_
             'index' => 'abandoned_id',
         ));
 
-        $this->addColumn('customer_name', array(
+        $this->addColumn('quote_customer_name', array(
             'header'    =>Mage::helper('abandoned')->__('Customer Name'),
-            'index'     =>'customer_name',
+            'index'     =>'quote_customer_name',
             'sortable'  =>false
         ));
 
-        $this->addColumn('email', array(
+        $this->addColumn('quote_customer_email', array(
             'header'    =>Mage::helper('abandoned')->__('Email'),
-            'index'     =>'email',
+            'index'     =>'quote_customer_email',
             'sortable'  =>false
         ));
 
         $currencyCode = Mage::app()->getStore()->getBaseCurrencyCode();
         
-        $this->addColumn('subtotal', array(
-            'header'        => Mage::helper('reports')->__('Subtotal'),
+        $this->addColumn('quote_base_grand_total', array(
+            'header'        => Mage::helper('reports')->__('Grand Total'),
             'width'         => '80px',
             'type'          => 'currency',
             'currency_code' => $currencyCode,
-            'index'         => 'subtotal',
+            'index'         => 'quote_base_grand_total',
             'sortable'      => false,
             'renderer'      => 'adminhtml/report_grid_column_renderer_currency',
             'rate'          => $this->getRate($currencyCode),
         ));
         
-        $this->addColumn('abandoned_discount', array(
+        $this->addColumn('abandoned_base_discount', array(
             'header'        => Mage::helper('reports')->__('Discount'),
             'width'         => '80px',
             'type'          => 'currency',
             'currency_code' => $currencyCode,
-            'index'         => 'abandoned_discount',
+            'index'         => 'abandoned_base_discount',
             'sortable'      => false,
             'renderer'      => 'adminhtml/report_grid_column_renderer_currency',
             'rate'          => $this->getRate($currencyCode),
         ));
         
-        $this->addColumn('created_at', array(
+        $this->addColumn('quote_created_at', array(
             'header'    =>Mage::helper('reports')->__('Created At'),
             'width'     =>'170px',
             'type'      =>'datetime',
-            'index'     =>'created_at',
-            'filter_index'=>'main_table.created_at',
+            'index'     =>'quote_created_at',
+            'filter_index'=>'quote_created_at',
             'sortable'  =>false
         ));
 
-        $this->addColumn('updated_at', array(
+        $this->addColumn('quote_updated_at', array(
             'header'    =>Mage::helper('reports')->__('Updated At'),
             'width'     =>'170px',
             'type'      =>'datetime',
-            'index'     =>'updated_at',
-            'filter_index'=>'main_table.updated_at',
+            'index'     =>'quote_updated_at',
+            'filter_index'=>'quote_updated_at',
             'sortable'  =>false
         ));
         
@@ -93,15 +93,43 @@ class Magestore_Abandoned_Block_Adminhtml_Abandoned_Grid extends Mage_Adminhtml_
             'width' => '80px',
             'index' => 'status',
             'type' => 'options',
-            'options' => array(
-                1 => 'Enabled',
-                0 => 'Disabled',
-            ),
+            'options' => Magestore_Abandoned_Model_Abandoned::getStatusArray(),
         ));
-        //$this->addExportType('*/*/exportCsv', Mage::helper('membership')->__('CSV'));
-        //$this->addExportType('*/*/exportXml', Mage::helper('membership')->__('XML'));
-
+        
+        $this->addColumn('is_success', array(
+            'header' => Mage::helper('abandoned')->__('Purchased'),
+            'align' => 'left',
+            'width' => '80px',
+            'index' => 'is_success',
+            'type' => 'options',
+            'options' => Magestore_Abandoned_Model_Abandoned::getSuccessArray(),
+        ));
+        
         return parent::_prepareColumns();
+    }
+    
+    public function getGridUrl() {
+        return $this->getUrl('*/*/grid', array('_current' => true));
+    }
+
+    protected function _prepareMassaction() {
+        $this->setMassactionIdField('abandoned_id');
+        $this->getMassactionBlock()->setFormFieldName('abandoned_id');
+        $statuses = Magestore_Abandoned_Model_Abandoned::getStatusArray();
+        $this->getMassactionBlock()->addItem('status', array(
+            'label' => Mage::helper('abandoned')->__('Change status'),
+            'url' => $this->getUrl('*/*/massStatus', array('_current' => true)),
+            'additional' => array(
+                'visibility' => array(
+                    'name' => 'status',
+                    'type' => 'select',
+                    'class' => 'required-entry',
+                    'label' => Mage::helper('abandoned')->__('Status'),
+                    'values' => $statuses
+                )
+            )
+        ));
+        return $this;
     }
 
 }

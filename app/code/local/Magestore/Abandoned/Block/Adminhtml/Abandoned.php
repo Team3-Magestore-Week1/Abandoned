@@ -7,5 +7,6 @@ class Magestore_Abandoned_Block_Adminhtml_Abandoned extends Mage_Adminhtml_Block
     $this->_blockGroup = 'abandoned';
     $this->_headerText = Mage::helper('abandoned')->__('Abandoned Manager');
     parent::__construct();
+    $this->_removeButton('add');
   }
 }
