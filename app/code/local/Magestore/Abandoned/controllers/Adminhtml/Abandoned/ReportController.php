@@ -43,12 +43,15 @@ class Magestore_Abandoned_Adminhtml_Abandoned_ReportController extends Mage_Admi
     
     public function searchAction(){
         $params = $this->getRequest()->getParams();
+        $params['to'] = $params['to'].' 23:59:59';
         $collection = Mage::getModel('abandoned/abandoned')->getCollection()
                 ->addFieldToFilter('order_success_time', array(
+                    'from'=>$params['from'],
                     'to'=> $params['to']
                 ));
+        
                 
-        Zend_Debug::dump($collection->getSelect()->__toString());die;
+        
     }
     
     
