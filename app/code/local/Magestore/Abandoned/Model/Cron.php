@@ -40,6 +40,7 @@ class Magestore_Abandoned_Model_Cron extends Varien_Object
 
         $collectionNin = Mage::getResourceModel('reports/quote_collection');
         $collectionNin->prepareForAbandonedReport();
+        
         $collectionNin->getSelect()->columns(
                 array('sub_time' => 'DATE_ADD(main_table.created_at,INTERVAL ' . $remindTime . ' DAY)')
         );
@@ -48,6 +49,9 @@ class Magestore_Abandoned_Model_Cron extends Varien_Object
                 ->getCollection()
                 ->addFieldToSelect('quote_id')
                 ->getData();
+        $notRemindEmail = Mage::getModel('abandoned/configonoff')->getCollection()
+                ->addFieldToFilter('status', Magestore_Abandoned_Model_Configonoff::STATUS_ENABLE)
+                ->getColumnValues('emailcustomer');
         if(count($abandoned)>0)
             $collectionNin->addFieldToFilter('main_table.entity_id', 
                     array('nin'=>$abandoned)
