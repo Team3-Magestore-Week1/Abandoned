@@ -23,31 +23,37 @@
  * @copyright   Copyright (c) 2006-2015 X.commerce, Inc. (http://www.magento.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
+$customeremail = Mage::getSingleton('customer/session')->getCustomer()->getEmail();
+?>
+
+<?php 
+$config = Mage::getModel('abandoned/configonoff')->load($customeremail, 'emailcustomer');
+$value = $config->getStatus()?$config->getStatus():0;
 ?>
 <form id="signup_affiliate_account_form" role="form"  method="post" action="<?php echo $this->getUrl('abandoned/index/createPost') ?>">
-<div class="">
-    <label for="notification"><?php echo $this->__('Receive notification emails') ?></label>
+    <div class="">
+        <label for="notification"><?php echo $this->__('Receive notification emails') ?></label>
 
-    <select name="notification" id="notification" class="input-select form-control">
-        <option value="0"><?php echo $this->__('No') ?></option>
-        <option value="1" selected="selected"><?php echo $this->__('Yes') ?></option>
-    </select>
+        <select name="notification" id="notification" class="input-select form-control">
+            <option <?php if($value==0)echo'selected'; ?> value="0"><?php echo $this->__('No') ?></option>
+            <option value="1" <?php if($value==1)echo'selected'; ?>><?php echo $this->__('Yes') ?></option>
+        </select>
 
-</div>
-<div class="buttons-set">
-    <button type="submit" title="<?php echo $this->__('Save'); ?>" class="button button-config">
+    </div>
+    <div class="buttons-set">
+        <button type="submit" title="<?php echo $this->__('Save'); ?>" class="button button-config">
+            <span>
+                <span><?php echo $this->__('Save') ?></span>
+            </span>
+        </button>
+        <p class="back-link">
+            <a href="javascript:history.go(-1)">
+                <button type="button" title="<?php echo $this->__('Save'); ?>" class="button button-config" onclick="javascript:history.go(-1)">
                     <span>
-                        <span><?php echo $this->__('Save') ?></span>
+                        <span><?php echo $this->__('Back') ?></span>
                     </span>
-    </button>
-    <p class="back-link">
-        <a href="javascript:history.go(-1)">
-            <button type="button" title="<?php echo $this->__('Save'); ?>" class="button button-config" onclick="javascript:history.go(-1)">
-                            <span>
-                                <span><?php echo $this->__('Back') ?></span>
-                            </span>
-            </button>
-        </a>
-    </p>
-</div>
+                </button>
+            </a>
+        </p>
+    </div>
 </form>

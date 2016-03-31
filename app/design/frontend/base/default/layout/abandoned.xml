@@ -31,7 +31,7 @@
         </reference>
     </abandoned_index_index>
     <remind_email_to_customer>
-            <block type="core/template" name="abandoned" template="abandoned/account/welcome.phtml" />
+        <block type="core/template" name="abandoned" template="abandoned/account/welcome.phtml" />
     </remind_email_to_customer>
 
 </layout>
