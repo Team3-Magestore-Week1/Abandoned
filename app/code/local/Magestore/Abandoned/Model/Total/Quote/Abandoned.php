@@ -35,6 +35,7 @@ class Magestore_Abandoned_Model_Total_Quote_Abandoned extends Mage_Sales_Model_Q
         $address->setGrandTotal($grandTotal-$discount);
         $address->setBaseAbandonedDiscount($baseDiscount);
         $address->setAbandonedDiscount($discount);
+        $address->setAbandonedDiscountValue($discountValue);
         $quote->setBaseAbandonedDiscount($baseDiscount);
         $quote->setAbandonedDiscount($baseDiscount);
         return $this;
@@ -48,7 +49,7 @@ class Magestore_Abandoned_Model_Total_Quote_Abandoned extends Mage_Sales_Model_Q
         if ($discount = $address->getAbandonedDiscount()) {
             $address->addTotal(array(
                 'code' => $this->getCode(),
-                'title' => Mage::helper('abandoned')->__('Abandoned Discount'),
+                'title' => Mage::helper('abandoned')->__('Abandoned Discount ').$address->getAbandonedDiscountValue().'%',
                 'value' => -$discount,
             ));
         }
