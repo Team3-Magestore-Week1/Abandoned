@@ -71,7 +71,6 @@ class Magestore_Abandoned_Model_Cron extends Varien_Object
                 . ' AND abandoned.remind_num < '.$maxCountRemind
                 . ' AND DATE_ADD(abandoned.last_remind_time, INTERVAL '.$remindTime.' DAY) <= "'.$now.'"'
         );
-        
         $this->abandoned($collectionIn);
     }
     

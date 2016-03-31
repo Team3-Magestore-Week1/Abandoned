@@ -30,8 +30,7 @@
 class Magestore_Abandoned_IndexController extends Mage_Core_Controller_Front_Action {
 
     public function testAction() {
-        $templates = Mage::getModel('abandoned/system_config_email_template')->toOptionArray();
-        Zend_Debug::dump($templates);die;
+       
         Mage::getModel('abandoned/cron')->run();
     }
 

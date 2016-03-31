@@ -35,6 +35,8 @@ class Magestore_Abandoned_Model_Total_Quote_Abandoned extends Mage_Sales_Model_Q
         $address->setGrandTotal($grandTotal-$discount);
         $address->setBaseAbandonedDiscount($baseDiscount);
         $address->setAbandonedDiscount($discount);
+        $quote->setBaseAbandonedDiscount($baseDiscount);
+        $quote->setAbandonedDiscount($baseDiscount);
         return $this;
     }
 
