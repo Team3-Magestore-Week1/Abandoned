@@ -43,15 +43,40 @@ class Magestore_Abandoned_Adminhtml_Abandoned_ReportController extends Mage_Admi
     
     public function searchAction(){
         $params = $this->getRequest()->getParams();
-        $params['to'] = $params['to'].' 23:59:59';
-        $collection = Mage::getModel('abandoned/abandoned')->getCollection()
-                ->addFieldToFilter('order_success_time', array(
-                    'from'=>$params['from'],
-                    'to'=> $params['to']
-                ));
-        
-                
-        
+        $to = $params['to'].' 23:59:59';
+//        $collection = Mage::getModel('abandoned/abandoned')->getCollection()
+//                ->addFieldToFilter('order_success_time', array(
+//                    'from'=>$params['from'],
+//                    'to'=> $params['to']
+//                ));
+        $start = new DateTime($params['from']);
+        $end = new DateTime($params['to']);
+        $end->modify('+1 day');
+        $interval = new DateInterval('P1D'); // 1 Day interval
+        $period = new DatePeriod($start, $interval, $end);
+        foreach ($period as $day) {
+            $timeArray[] = $day->format('Y-m-d');
+        }
+        $format = '%Y-%m-%d';
+        foreach ($timeArray as $time) {
+            $collection = Mage::getModel('abandoned/abandoned')->getCollection();
+            $collection->getSelect()->where("date(order_success_time) = DATE_FORMAT('$time','$format')");
+            $countSuccess[] = $collection->getSize();
+            $sumDiscount[] = array_sum($collection->getColumnValues('abandoned_base_discount'));
+            $sumTotal[] = array_sum($collection->getColumnValues('quote_base_grand_total'));
+        }
+        return $this->getResponse()->setBody(json_encode(
+                array(
+                    'timeArray' => $timeArray,
+                    'countSuccess' => $countSuccess, 
+                    'sumDiscount' => $sumDiscount,
+                    'sumTotal' => $sumTotal
+                )));
+    }
+    
+    public function getTimeZone()
+    {
+        return Mage::getStoreConfig('general/locale/timezone');
     }
     
     
