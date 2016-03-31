@@ -1,0 +1,130 @@
+<div id="recipe-report">
+    <div class="row" style="padding-bottom:10px;border-bottom: 1px solid #cccccc">
+        <div class="col-sm-3 text-left select-recipe">
+            <label for="recipe-id"><?php echo $this->__("Recipe:") ?></label>
+            <select class="form-control inline-block" name="recipe-id" id="recipe-id">
+                <option value="0" selected="selected"><?php echo $this->__("Select Recipe") ?></option>
+                <?php foreach ($this->getRecipeOptions() as $key => $value): ?>
+                    <option value="<?php echo $key ?>"> <?php echo $value ?></option>
+                <?php endforeach ?>
+            </select>
+        </div>
+        <div class="col-sm-9 report-period text-left">
+            <label for="recipe-period"><?php echo $this->__("Reporting period:") ?></label>
+            <select class="form-control inline-block" name="recipe-period" id="recipe-period"
+                    style="margin-right: 30px;">
+                <option value="last7"><?php echo $this->__("Last 7 days") ?></option>
+                <option value="last30"><?php echo $this->__("Last 30 days") ?></option>
+                <option value="last24"><?php echo $this->__("Last 24 hours") ?></option>
+                <option value="custom"><?php echo $this->__("Custom") ?></option>
+            </select>
+            <span class="custom-period" style="display: none;">
+                <label for="recipe-period-from"><?php echo $this->__("From") ?></label>
+                <input type="text" name="recipe-period-from" id="recipe-period-from"
+                       class="datepicker period-from form-control inline-block">
+                <label for="recipe-period-to"><?php echo $this->__("To") ?></label>
+                <input type="text" id="recipe-period-to" name="recipe-period-to"
+                       class="datepicker period-to form-control inline-block">
+                <input type="button" class="btn btn-primary" value="<?php echo $this->__("OK") ?>"/>
+            </span>
+        </div>
+    </div>
+    <div class="col-sm-12 recipe-inner-tabs">
+        <div class="col-sm-2 tab active-tab"
+             data-recordstatus="<?php echo Magestore_Integration_Model_History::STATUS_SUCCESS ?>"><?php echo $this->__("Success Records") ?>
+        </div>
+        <div class="col-sm-2 tab"
+             data-recordstatus="<?php echo Magestore_Integration_Model_History::STATUS_FAIL ?>"><?php echo $this->__("Failed Records") ?>
+        </div>
+        <div class="col-sm-2 tab" data-recordstatus="all"><?php echo $this->__("Total Records") ?></div>
+    </div>
+    <div class="col-sm-12 report-result">
+        <div id="chart_div" class="report-content clear report-chart">
+            <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+            <script>google.charts.load('current', {'packages': ['corechart']});</script>
+        </div>
+    </div>
+</div>
+<style>
+    #recipe-report .select-recipe label {
+        width: 20%;
+        height: 37px;line-height: 37px;
+        display: inline-block;
+    }
+    #recipe-report .recipe-inner-tabs .tab{
+        border: 1px solid #d1e0e8;
+        border-collapse: collapse;
+    }
+    #recipe-report .select-recipe .select2-container {
+        float: right;
+        width: 80% !important;
+    }
+</style>
+<script>
+    $(document).ready(function () {
+        $('#recipe-id').select2({placeholder: "<?php echo $this->__("Select recipe") ?>"});
+        $('.datepicker').datepicker({format: 'yyyy-mm-dd'});
+        // select recipe
+        $('#recipe-id').change(magestoreIntegration.getRecipeReport.bind(magestoreIntegration));
+        // change period
+        $('#recipe-period').change(function () {
+            $('.custom-period').hide();
+            if ($(this).val() == 'custom') {
+                $('.custom-period').show();
+            } else {
+                magestoreIntegration.getRecipeReport.bind(magestoreIntegration)();
+            }
+        });
+        // click on tab
+        $('.recipe-inner-tabs .tab').click(function () {
+            $('.recipe-inner-tabs .tab').removeClass('active-tab');
+            $(this).addClass('active-tab');
+            magestoreIntegration.getRecipeReport.bind(magestoreIntegration)();
+        });
+        // click on button in custom period
+        $('#recipe-report .custom-period input[type=button]').click(function () {
+            if ($('#recipe-period-from').val() && $('#recipe-period-to').val()) {
+                magestoreIntegration.getRecipeReport.bind(magestoreIntegration)();
+            }
+        });
+    });
+    MagestoreIntegration.prototype.getRecipeReport = function () {
+        if ($('#recipe-id').val() != '0' && $('#recipe-period').val()) {
+            $.ajax({
+                url: this.baseUrl + "integration_report/getRecipeReport",
+                data: {
+                    recipeId: $('#recipe-id').val(),
+                    recordType: $('#recipe-report').find('.recipe-inner-tabs div.active-tab').data('recordstatus'),
+                    period: $('#recipe-period').val(),
+                    from: $('#recipe-period-from').val(),
+                    to: $('#recipe-period-to').val(),
+                },
+                success: function (result) {
+                    if (result) {
+                        var recipeData = [['Time', 'Record']];
+                        result = JSON.parse(result);
+                        var total = 0;
+                        for (var i = 0; i < result.time.length; i++) {
+                            var value = Number.parseInt(result.value[i]);
+                            recipeData.push([result.time[i], value]);
+                            total += value;
+                        }
+                        function drawChart() {
+                            var data = google.visualization.arrayToDataTable(recipeData);
+                            var options = {
+                                title: 'Total records: ' + total,
+                                hAxis: {title: 'Time', titleTextStyle: {color: '#333'}},
+                                vAxis: {minValue: 0}
+                            };
+                            var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
+                            chart.draw(data, options);
+                        }
+
+                        //google code.
+                        google.charts.setOnLoadCallback(drawChart);
+                    }
+                }
+            })
+        }
+    }
+</script>

@@ -165,4 +165,11 @@
             </email>
         </template>
     </global>
+    <default>
+        <abandoned>
+            <general>
+                <active>1</active>
+            </general>
+        </abandoned>
+    </default>
 </config>

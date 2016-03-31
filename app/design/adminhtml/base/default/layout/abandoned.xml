@@ -5,4 +5,11 @@
             <block type="abandoned/adminhtml_abandoned" name="abandoned" />
         </reference>
     </adminhtml_abandoned_index_index>
+    <adminhtml_abandoned_report_index>
+         <reference name="notifications">
+             <block type="adminhtml/template" template="abandoned/report.phtml" name="report_grid_js">
+                 <block  type="adminhtml/template" template="abandoned/report/filter.phtml" name="report_filter"/> 
+             </block>
+        </reference>
+    </adminhtml_abandoned_report_index>
 </layout>

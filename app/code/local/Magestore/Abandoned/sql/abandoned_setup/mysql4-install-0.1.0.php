@@ -44,6 +44,7 @@ CREATE TABLE {$this->getTable('abandoned/abandoned')} (
   `quote_customer_email` varchar(255) NULL,
   `quote_created_at` DATETIME NULL,
   `quote_updated_at` DATETIME NULL,
+  `order_success_time` DATETIME NULL,
   PRIMARY KEY (`abandoned_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

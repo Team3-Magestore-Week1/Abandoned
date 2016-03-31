@@ -1,0 +1,62 @@
+<div class="entry-edit">
+    <form  id="filter_form">
+        <div class="entry-edit-head">
+            <h4 class="icon-head head-edit-form fieldset-legend">Filter</h4>
+            <div class="form-buttons"></div>
+        </div>
+        <div id="abandoned_report_base_fieldset" class="fieldset ">
+            <div class="hor-scroll">
+                <table cellspacing="0" class="form-list">
+                    <tbody>
+                        <tr>
+                            <td class="label">
+                                <label for="abandoned_report_from">
+                                    <?php echo $this->__('From') ?> 
+                                    <span class="required">*</span>
+                                </label>
+                            </td>
+                            <td class="value">
+                                <input type="text" style="width:110px !important;" class=" required-entry input-text" title="From" value="" id="abandoned_report_from" name="from"> <img style="" title="Select Date" id="abandoned_report_from_trig" class="v-middle" alt="" src="https://localhost.com/magento/ce1921/skin/adminhtml/default/default/images/grid-cal.gif">
+                                <script type="text/javascript">
+                                    //&lt;![CDATA[
+                                    Calendar.setup({
+                                        inputField: "abandoned_report_from",
+                                        ifFormat: "%m/%e/%Y",
+                                        showsTime: false,
+                                        button: "abandoned_report_from_trig",
+                                        align: "Bl",
+                                        singleClick: true
+                                    });
+                                    //]]&gt;
+                                </script>            
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="label">
+                                <label for="abandoned_report_to">
+                                    <?php echo $this->__('To') ?> 
+                                    <span class="required">*</span>
+                                </label>
+                            </td>
+                            <td class="value">
+                                <input type="text" style="width:110px !important;" class=" required-entry input-text" title="To" value="" id="abandoned_report_to" name="to"> <img style="" title="Select Date" id="abandoned_report_to_trig" class="v-middle" alt="" src="https://localhost.com/magento/ce1921/skin/adminhtml/default/default/images/grid-cal.gif">
+                                <script type="text/javascript">
+                                    //&lt;![CDATA[
+                                    Calendar.setup({
+                                        inputField: "abandoned_report_to",
+                                        ifFormat: "%m/%e/%Y",
+                                        showsTime: false,
+                                        button: "abandoned_report_to_trig",
+                                        align: "Bl",
+                                        singleClick: true
+                                    });
+                                    //]]&gt;
+                                </script>            
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </form>
+</div>
