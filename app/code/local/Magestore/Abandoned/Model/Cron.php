@@ -52,16 +52,21 @@ class Magestore_Abandoned_Model_Cron extends Varien_Object
         $collectionNin->addFieldToFilter('DATE_ADD(main_table.created_at,INTERVAL ' . $remindTime . ' DAY)', array('to' => $now));
         $abandoned = Mage::getModel('abandoned/abandoned')
                 ->getCollection()
-                ->addFieldToSelect('quote_id')
-                ->getData();
+                ->getColumnValues('quote_id');
         $notRemindEmail = Mage::getModel('abandoned/configonoff')->getCollection()
-                ->addFieldToFilter('status', Magestore_Abandoned_Model_Configonoff::STATUS_ENABLE)
+                ->addFieldToFilter('status', Magestore_Abandoned_Model_Configonoff::STATUS_DISABLE)
                 ->getColumnValues('emailcustomer');
         if(count($abandoned)>0)
             $collectionNin->addFieldToFilter('main_table.entity_id',
                     array('nin'=>$abandoned)
             );
+        if(count($notRemindEmail)>0)
+            $collectionNin->addFieldToFilter('main_table.customer_email',
+                    array('nin'=>$notRemindEmail)
+            );
+        
         $this->abandoned($collectionNin, $remindConfig);
+        
         $collectionIn = Mage::getResourceModel('reports/quote_collection');
         $collectionIn->prepareForAbandonedReport();
         $collectionIn->getSelect()->columns(
@@ -72,12 +77,17 @@ class Magestore_Abandoned_Model_Cron extends Varien_Object
             $collectionIn->addFieldToFilter('main_table.entity_id', 
                     array('in'=>$abandoned)
             );
+        if(count($notRemindEmail)>0)
+            $collectionNin->addFieldToFilter('main_table.customer_email',
+                    array('nin'=>$notRemindEmail)
+            );
         $collectionIn->getSelect()->join(array('abandoned' => $collectionIn->getTable('abandoned/abandoned')), 'main_table.entity_id = abandoned.quote_id'
                 . ' AND abandoned.status = ' . Magestore_Abandoned_Model_Abandoned::STATUS_ENABLE
                 . ' AND abandoned.is_success = 0'
                 . ' AND abandoned.remind_num < '.$maxCountRemind
                 . ' AND DATE_ADD(abandoned.last_remind_time, INTERVAL '.$remindTime.' DAY) <= "'.$now.'"'
         );
+        
         $this->abandoned($collectionIn, $remindConfig);
     }
     
