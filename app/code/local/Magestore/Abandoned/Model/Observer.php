@@ -8,7 +8,7 @@ class Magestore_Abandoned_Model_Observer {
         if ($block instanceof Mage_Customer_Block_Account_Navigation) {
             $topLinks = $block->getLayout()->getBlock('customer_account_navigation');
             if (isset($topLinks) && $topLinks != null) {
-                $topLinks->addLink('Abandoned', 'adbandoned/index/index', 'Abandoned');
+                $topLinks->addLink('Abandoned', 'abandoned/index/index', 'Abandoned');
             }
         }
     }

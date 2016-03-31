@@ -30,7 +30,6 @@
 class Magestore_Abandoned_IndexController extends Mage_Core_Controller_Front_Action {
 
     public function testAction() {
-
         Mage::getModel('abandoned/cron')->run();
     }
 
@@ -65,7 +64,6 @@ class Magestore_Abandoned_IndexController extends Mage_Core_Controller_Front_Act
         }catch (Exception $e){
             $coreSession->addError($e->getMessage());
         }
-
     }
 
 }
