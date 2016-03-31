@@ -47,6 +47,15 @@ class Magestore_Abandoned_Model_Abandoned extends Mage_Core_Model_Abstract
         );
     }
     
+    public static function getSuccessArray(){
+        return array(
+            self::IS_SUCCESS => 'Yes',
+            self::IS_NOT_SUCCESS => 'No',
+        );
+    }
+    
+    
+    
     public function saveAbandoned($item){
         $now = Varien_Date::now();
         $this->setQuoteId($item->getEntityId())
