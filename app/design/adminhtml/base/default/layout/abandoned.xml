@@ -5,4 +5,5 @@
             <block type="abandoned/adminhtml_abandoned" name="abandoned" />
         </reference>
     </adminhtml_abandoned_index_index>
+
 </layout>
