@@ -31,6 +31,9 @@ class Magestore_Abandoned_Model_Cron extends Varien_Object
     const XML_PATH_ADMIN_EMAIL_IDENTITY = 'trans_email/ident_general';
 
     public function run(){
+        if (!Mage::helper('abandoned')->isAbandonedEnabled()){
+            return;
+        }
         $remindConfig = Mage::getStoreConfig('abandoned/general/discount_config');
         $remindConfig = unserialize($remindConfig);
         if(count($remindConfig)<1)
@@ -54,11 +57,21 @@ class Magestore_Abandoned_Model_Cron extends Varien_Object
 //        $notRemindEmail = Mage::getModel('abandoned/configonoff')->getCollection()
 //                ->addFieldToFilter('status', Magestore_Abandoned_Model_Configonoff::STATUS_ENABLE)
 //                ->getColumnValues('emailcustomer');
+                ->getColumnValues('quote_id');
+        $notRemindEmail = Mage::getModel('abandoned/configonoff')->getCollection()
+                ->addFieldToFilter('status', Magestore_Abandoned_Model_Configonoff::STATUS_DISABLE)
+                ->getColumnValues('emailcustomer');
         if(count($abandoned)>0)
             $collectionNin->addFieldToFilter('main_table.entity_id',
                     array('nin'=>$abandoned)
             );
+        if(count($notRemindEmail)>0)
+            $collectionNin->addFieldToFilter('main_table.customer_email',
+                    array('nin'=>$notRemindEmail)
+            );
+
         $this->abandoned($collectionNin, $remindConfig);
+
         $collectionIn = Mage::getResourceModel('reports/quote_collection');
         $collectionIn->prepareForAbandonedReport();
         $collectionIn->getSelect()->columns(
@@ -69,12 +82,17 @@ class Magestore_Abandoned_Model_Cron extends Varien_Object
             $collectionIn->addFieldToFilter('main_table.entity_id', 
                     array('in'=>$abandoned)
             );
+        if(count($notRemindEmail)>0)
+            $collectionNin->addFieldToFilter('main_table.customer_email',
+                    array('nin'=>$notRemindEmail)
+            );
         $collectionIn->getSelect()->join(array('abandoned' => $collectionIn->getTable('abandoned/abandoned')), 'main_table.entity_id = abandoned.quote_id'
                 . ' AND abandoned.status = ' . Magestore_Abandoned_Model_Abandoned::STATUS_ENABLE
                 . ' AND abandoned.is_success = 0'
                 . ' AND abandoned.remind_num < '.$maxCountRemind
                 . ' AND DATE_ADD(abandoned.last_remind_time, INTERVAL '.$remindTime.' DAY) <= "'.$now.'"'
         );
+
         $this->abandoned($collectionIn, $remindConfig);
     }
     
@@ -105,6 +123,16 @@ class Magestore_Abandoned_Model_Cron extends Varien_Object
 //        if ($quote->getId()) {
 //            $collection = $quote->getItemsCollection(false);
 //        }
+        $customerId = $item->getData('customer_id');
+        $customer = Mage::getModel('customer/customer');
+        if ($customerId) {
+            $customer->load($customerId);
+        }
+         $quote = Mage::getModel('sales/quote')
+             ->load($item->getEntityId());
+        if ($quote->getId()) {
+            $collection = $quote->getItemsCollection(false);
+        }
 
 
 
