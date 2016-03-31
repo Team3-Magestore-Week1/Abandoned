@@ -137,5 +137,14 @@
                 </totals>
             </quote>
         </sales>
+        <template>
+            <email>
+                <magestore_abandoned_remind translate="label" module="abandoned">
+                    <label>Remind Abandoned Cart</label>
+                    <file>abandoned/abandoned_email.html</file>
+                    <type>html</type>
+                </magestore_abandoned_remind>
+            </email>
+        </template>
     </global>
 </config>

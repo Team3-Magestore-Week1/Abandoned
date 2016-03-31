@@ -84,10 +84,15 @@ class Magestore_Abandoned_Model_Cron extends Varien_Object
                     ->getFirstItem();
             $model->saveAbandoned($item);
             $this->sendEmail($item, $model);
+            $this->sendSms($item, $model);
         }
     }
     
     public function sendEmail($item, $model){
+        
+    }
+    
+    public function sendSms($item, $model){
         
     }
 }
