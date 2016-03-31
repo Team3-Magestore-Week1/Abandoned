@@ -52,7 +52,13 @@ class Magestore_Abandoned_Model_Abandoned extends Mage_Core_Model_Abstract
         $this->setQuoteId($item->getEntityId())
                 ->setRemindNum($this->getRemindNum()+1)
                 ->setLastRemindTime($now)
-                ->setStatus(1);
+                ->setStatus(1)
+                ->setQuoteBaseGrandTotal($item->getBaseGrandTotal())
+                ->setAbandonedBaseDiscount($this->getAbandonedBaseDiscount())
+                ->setQuoteCustomerName($item->getCustomerName())
+                ->setQuoteCustomerEmail($item->getCustomerEmail())
+                ->setQuoteCreatedAt($item->getCreatedAt())
+                ->setQuoteUpdatedAt($item->getUpdatedAt());
         if(!$this->getId())
             $this->setId(null);
         return $this->save();

@@ -12,6 +12,7 @@ class Magestore_Abandoned_Block_Adminhtml_Abandoned_Grid extends Mage_Adminhtml_
     }
 
     protected function _prepareCollection() {
+        
         $collection = Mage::getModel('abandoned/abandoned')->getCollection();
         $this->setCollection($collection);
         return parent::_prepareCollection();
@@ -79,7 +80,12 @@ class Magestore_Abandoned_Block_Adminhtml_Abandoned_Grid extends Mage_Adminhtml_
             'sortable'  =>false
         ));
         
-        
+        $this->addColumn('remind_num', array(
+            'header' => Mage::helper('abandoned')->__('Remind Number'),
+            'align' => 'left',
+            'width' => '80px',
+            'index' => 'remind_num',
+        ));
 
         $this->addColumn('status', array(
             'header' => Mage::helper('abandoned')->__('Status'),
