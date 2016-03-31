@@ -31,6 +31,9 @@ class Magestore_Abandoned_Model_Cron extends Varien_Object
     const XML_PATH_ADMIN_EMAIL_IDENTITY = 'trans_email/ident_general';
 
     public function run(){
+        if (!Mage::helper('abandoned')->isAbandonedEnabled()){
+            return;
+        }
         $remindConfig = Mage::getStoreConfig('abandoned/general/discount_config');
         $remindConfig = unserialize($remindConfig);
         if(count($remindConfig)<1)
@@ -92,9 +95,6 @@ class Magestore_Abandoned_Model_Cron extends Varien_Object
     }
 
     public function sendEmail($item, $model, $remindConfig){
-        if (!Mage::helper('abandoned')->isAbandonedEnabled()){
-            return;
-        }
         $customerId = $item->getData('customer_id');
         $customer = Mage::getModel('customer/customer');
         if ($customerId) {

@@ -2,7 +2,6 @@
 class Magestore_Abandoned_Model_Observer {
 
     public function showLinks($observer) {
-
         $storeId = Mage::app()->getStore()->getId();
         $block = $observer['block'];
         // zend_debug::dump(get_class($block));die('12');
@@ -15,9 +14,9 @@ class Magestore_Abandoned_Model_Observer {
     }
 
     public function orderSaveAfter($observers) {
-        $enableModule = Mage::getStoreConfig('abandoned/general/enable');
-        if (!$enableModule)
+        if (!Mage::helper('abandoned')->isAbandonedEnabled()){
             return;
+        }
         $order = $observers->getEvent()->getOrder();
         $quote = $order->getQuote();
         $model = Mage::getModel('abandoned/abandoned')->load($quote->getId(), 'quote_id');
