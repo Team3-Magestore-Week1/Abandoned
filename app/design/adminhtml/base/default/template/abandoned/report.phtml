@@ -48,7 +48,26 @@
             method :'post',
             area :$(this.idPrefix + 'simple_form'),
             onComplete : function(xhr){
+                if(!xhr.responseText)
+                    return;
                 var result = JSON.parse(xhr.responseText);
+                var data = [['Time', 'Count Success', 'Total Money', 'Total Discount']];
+                var total = 0;
+                for (var i = 0; i < result.timeArray.length; i++) {
+                    var count_sucesss = Number.parseInt(result.countSuccess[i]);
+                    var total_money = result.sumTotal[i];
+                    var total_discount = result.sumDiscount[i];
+                    data.push([result.timeArray[i], count_sucesss, total_money, total_discount]);
+                    total += count_sucesss;
+                }
+                var data = google.visualization.arrayToDataTable(data);
+                var options = {
+                    title: 'Total records: ' + total,
+                    hAxis: {title: 'Time', titleTextStyle: {color: '#333'}},
+                    vAxis: {minValue: 0}
+                };
+                var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
+                chart.draw(data, options);
             }
         })
     }

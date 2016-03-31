@@ -44,11 +44,6 @@ class Magestore_Abandoned_Adminhtml_Abandoned_ReportController extends Mage_Admi
     public function searchAction(){
         $params = $this->getRequest()->getParams();
         $to = $params['to'].' 23:59:59';
-//        $collection = Mage::getModel('abandoned/abandoned')->getCollection()
-//                ->addFieldToFilter('order_success_time', array(
-//                    'from'=>$params['from'],
-//                    'to'=> $params['to']
-//                ));
         $start = new DateTime($params['from']);
         $end = new DateTime($params['to']);
         $end->modify('+1 day');
@@ -59,7 +54,8 @@ class Magestore_Abandoned_Adminhtml_Abandoned_ReportController extends Mage_Admi
         }
         $format = '%Y-%m-%d';
         foreach ($timeArray as $time) {
-            $collection = Mage::getModel('abandoned/abandoned')->getCollection();
+            $collection = Mage::getModel('abandoned/abandoned')->getCollection()
+                    ->addFieldToFilter('is_success', Magestore_Abandoned_Model_Abandoned::IS_SUCCESS);
             $collection->getSelect()->where("date(order_success_time) = DATE_FORMAT('$time','$format')");
             $countSuccess[] = $collection->getSize();
             $sumDiscount[] = array_sum($collection->getColumnValues('abandoned_base_discount'));
