@@ -48,7 +48,7 @@
             method :'post',
             area :$(this.idPrefix + 'simple_form'),
             onComplete : function(xhr){
-                
+                var result = JSON.parse(xhr.responseText);
             }
         })
     }
