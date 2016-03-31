@@ -48,7 +48,7 @@ class Magestore_Abandoned_Adminhtml_Abandoned_ReportController extends Mage_Admi
                     'to'=> $params['to']
                 ));
                 
-        Zend_Debug::dump($collection->getData());die;
+        Zend_Debug::dump($collection->getSelect()->__toString());die;
     }
     
     

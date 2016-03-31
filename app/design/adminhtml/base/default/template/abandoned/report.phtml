@@ -33,6 +33,7 @@
     </div>
 </div>
 <script type="text/javascript">
+    var reportUrl = '<?php echo Mage::getUrl('adminhtml/abandoned_report/search') ?>';
     var FORM_KEY = '<?php echo Mage::getSingleton('core/session')->getFormKey() ?>';
     function showAbandonedReport(){
         var filterForm = new varienForm('filter_form', '');
