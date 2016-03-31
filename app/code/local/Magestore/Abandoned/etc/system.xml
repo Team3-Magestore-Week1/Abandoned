@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magestore
+ * 
+ * NOTICE OF LICENSE
+ * 
+ * This source file is subject to the Magestore.com license that is
+ * available through the world-wide-web at this URL:
+ * http://www.magestore.com/license-agreement.html
+ * 
+ * DISCLAIMER
+ * 
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ * 
+ * @category    Magestore
+ * @package     Magestore_Abandoned
+ * @copyright   Copyright (c) 2016 Magestore (http://www.magestore.com/)
+ * @license     http://www.magestore.com/license-agreement.html
+ */
+-->
+<config>
+    <tabs>
+        <magestore translate="label">
+            <label>Magestore Extension</label>
+            <sort_order>400</sort_order>
+        </magestore>
+    </tabs>
+    <sections>
+        <abandoned translate="label" module="abandoned">
+            <class>separator-top</class>
+            <label>Abandoned</label>
+            <tab>magestore</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>299</sort_order>
+            <show_in_default>1</show_in_default>
+            <groups>
+                <general translate="label">
+                    <label>General Configuration</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>1</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <fields>        
+                        <enable translate="label">
+                            <label>Enable</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>1</sort_order>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <comment></comment>
+                        </enable>
+                        <delay_time_remind translate="label">
+                            <label>Remind After</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <comment>Please enter a number (days)</comment>
+                        </delay_time_remind>
+                        <discount_config translate="label">
+                            <label>Discount Configuration</label>
+                            <frontend_model>abandoned/system_config_discount</frontend_model>
+                            <backend_model>adminhtml/system_config_backend_serialized_array</backend_model>
+                            <sort_order>3</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <comment>Config your discount</comment>
+                        </discount_config>
+                    </fields>
+                </general>
+            </groups>
+        </abandoned>
+    </sections>
+</config>
