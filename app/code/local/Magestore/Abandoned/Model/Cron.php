@@ -54,10 +54,6 @@ class Magestore_Abandoned_Model_Cron extends Varien_Object
                 ->getCollection()
                 ->addFieldToSelect('quote_id')
                 ->getData();
-//        $notRemindEmail = Mage::getModel('abandoned/configonoff')->getCollection()
-//                ->addFieldToFilter('status', Magestore_Abandoned_Model_Configonoff::STATUS_ENABLE)
-//                ->getColumnValues('emailcustomer');
-                ->getColumnValues('quote_id');
         $notRemindEmail = Mage::getModel('abandoned/configonoff')->getCollection()
                 ->addFieldToFilter('status', Magestore_Abandoned_Model_Configonoff::STATUS_DISABLE)
                 ->getColumnValues('emailcustomer');
@@ -113,26 +109,6 @@ class Magestore_Abandoned_Model_Cron extends Varien_Object
         if (!Mage::helper('abandoned')->isAbandonedEnabled()){
             return;
         }
-//        $customerId = $item->getData('customer_id');
-//        $customer = Mage::getModel('customer/customer');
-//        if ($customerId) {
-//            $customer->load($customerId);
-//        }
-//         $quote = Mage::getModel('sales/quote')
-//             ->load($item->getEntityId());
-//        if ($quote->getId()) {
-//            $collection = $quote->getItemsCollection(false);
-//        }
-        $customerId = $item->getData('customer_id');
-        $customer = Mage::getModel('customer/customer');
-        if ($customerId) {
-            $customer->load($customerId);
-        }
-         $quote = Mage::getModel('sales/quote')
-             ->load($item->getEntityId());
-        if ($quote->getId()) {
-            $collection = $quote->getItemsCollection(false);
-        }
 
 
 
@@ -148,7 +124,7 @@ class Magestore_Abandoned_Model_Cron extends Varien_Object
                $template = $remind['email_template'];
                $number = $item->getData('items_count');
                $qty = (int)$item->getData('items_qty');
-               $base_total = $currency->format('subtotal');
+               $base_total = $currency->format($item->getData('subtotal'));
                $createAt = $item->getData('created_at');
                $updateAt = $item->getData('updated_at');
            }
