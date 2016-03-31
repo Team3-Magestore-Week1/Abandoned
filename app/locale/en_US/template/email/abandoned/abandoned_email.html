@@ -30,9 +30,14 @@ body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif;
                     <tr>
                         <td valign="top">
                             <p><strong>Hi {{var customer_name}}</strong>,<br/>
-                                Thanks for joining the {{var store.getFrontendName()}} <a href="{{store url=''}}">My website!</a><br/>
-                                We have sent this email to remind you checkout with a service discount {{var remind_value}}%.<br/>
-                                To login to our system, please click <a href="{{store url='customer/account/login'}}">Login</a>  at the top right of every page in our shop.</p>
+                                I am <strong>Richard</strong> from Customer Care department at <strong>{{var store.getFrontendName()}}</strong>.
+                                Thank you again for stopping by <strong>{{var store.getFrontendName()}}</strong> <a href="{{store url=''}}">My website!</a><br/>
+                                I noticed that you placed the following product(s) in your shopping cart, but did not complete your order:<br/>
+                                Did you meet any problems with the payment? Or is there anything else you expect from our product?
+                                Feel free to raise your questions and concern, I am pleased to assist you more via this email or livechat.
+
+                                However, if you are hesitating because of your budget, I have a proposal for you. Just follow the URL link or click the button to head back to your cart and check out to save {{var remind_value}}% on your order. .
+
                             <br/>
                             <br/>
                             <p>Your quote information is below.</p>
@@ -42,6 +47,7 @@ body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif;
                                     <col>
                                     <col width="100">
                                     <col width="60">
+                                    <col width="100">
                                     <col width="100">
                                     <col width="100">
                                     <col width="100">
@@ -58,43 +64,43 @@ body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif;
                                         <th><span class="nobr"><a href="#" name="price" title="asc" class="not-sort"><span class="sort-title">Updated At</span></a></span></th>
                                     </tr>
                             </thead>
+                                {{layout handle="remind_email_to_customer" order=$quote}}
                                 <tbody>
                                 <tr class="even pointer" title="abandoned cart">
                                     <td class=" ">
                                         {{var customer_name}}
                                     </td>
 
-                                    <!--<td class=" ">-->
-                                        <!--<div class="">-->
-                                            <!--<strong>{{var customer_email}}</strong>-->
-                                        <!--</div>-->
-                                    <!--</td>-->
-
-
-                                    <!--<td class=" ">-->
-                                        <!--{{var number_of_item}}-->
-                                    <!--</td>-->
-                                    <!--<td class=" a-right ">-->
-                                        <!--{{var qty}}-->
-                                    <!--</td>-->
-                                    <!--<td class=" a-right ">-->
-                                        <!--{{var base_total}}-->
-                                    <!--</td>-->
-                                    <!--<td class=" a-right ">-->
-                                        <!--{{var create_time}}-->
-                                    <!--</td>-->
-                                    <!--<td class=" a-right ">-->
-                                        <!--{{var updated_time}}-->
-                                    <!--</td>-->
+                                    <td class=" ">
+                                        <div class="">
+                                            <strong>{{var customer_email}}</strong>
+                                        </div>
+                                    </td>
+                                    <td class=" ">
+                                        {{var number}}
+                                    </td>
+                                    <td class=" a-right ">
+                                        {{var qty}}
+                                    </td>
+                                    <td class=" a-right ">
+                                        {{var subtotal}}
+                                    </td>
+                                    <td class=" a-right ">
+                                        {{var create_at}}
+                                    </td>
+                                    <td class=" a-right ">
+                                        {{var updated_at}}
+                                    </td>
                                 </tr>
                                 </tbody>
 
                             </table>
+                            Please login to our website to checkout, please click <a href="{{store url='customer/account/login'}}">Login</a></p>
                             <p>
-                                Thank you for choosing to work with {{var store.getFrontendName()}}. If you have any questions about your account, or any other matters, please feel free to contact us at <a href="mailto:{{config path='trans_email/ident_support/email'}}">{{config path='trans_email/ident_support/email'}}</a>  or call us within the working time (Monday - Friday, 8 a.m. - 5 p.m. PST).
+                                Hope this offer can help you to determine to finish the order quickly. I am sincerely looking forward to hearing from you in the shortest time.
                             </p>
                             <br/>
-                            <p>Thanks again,<br/><strong>{{var sender_name}}</strong></p>
+                            <p>Best regards,,<br/><strong>{{var sender_name}}</strong></p>
                         </td>
                     </tr>
                 </table>

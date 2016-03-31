@@ -51,9 +51,9 @@ class Magestore_Abandoned_Model_Cron extends Varien_Object
                 ->getCollection()
                 ->addFieldToSelect('quote_id')
                 ->getData();
-        $notRemindEmail = Mage::getModel('abandoned/configonoff')->getCollection()
-                ->addFieldToFilter('status', Magestore_Abandoned_Model_Configonoff::STATUS_ENABLE)
-                ->getColumnValues('emailcustomer');
+//        $notRemindEmail = Mage::getModel('abandoned/configonoff')->getCollection()
+//                ->addFieldToFilter('status', Magestore_Abandoned_Model_Configonoff::STATUS_ENABLE)
+//                ->getColumnValues('emailcustomer');
         if(count($abandoned)>0)
             $collectionNin->addFieldToFilter('main_table.entity_id',
                     array('nin'=>$abandoned)
@@ -95,21 +95,17 @@ class Magestore_Abandoned_Model_Cron extends Varien_Object
         if (!Mage::helper('abandoned')->isAbandonedEnabled()){
             return;
         }
-        $customerId = $item->getData('customer_id');
-        $customer = Mage::getModel('customer/customer');
-        if ($customerId) {
-            $customer->load($customerId);
-        }
-         $quote = Mage::getModel('sales/quote')
-             ->load($item->getEntityId());
-        if ($quote->getId()) {
-            $collection = $quote->getItemsCollection(false);
-        }
+//        $customerId = $item->getData('customer_id');
+//        $customer = Mage::getModel('customer/customer');
+//        if ($customerId) {
+//            $customer->load($customerId);
+//        }
+//         $quote = Mage::getModel('sales/quote')
+//             ->load($item->getEntityId());
+//        if ($quote->getId()) {
+//            $collection = $quote->getItemsCollection(false);
+//        }
 
-
-        foreach($collection as $item){
-            $product = Mage::getModel('catalog/product')->load($item['product_id']);
-        }
 
 
 
@@ -122,6 +118,11 @@ class Magestore_Abandoned_Model_Cron extends Varien_Object
            if($model->getData('remind_num') == $remind['number']){
               $remindValue = $remind['value'];
                $template = $remind['email_template'];
+               $number = $item->getData('items_count');
+               $qty = (int)$item->getData('items_qty');
+               $base_total = $currency->format('subtotal');
+               $createAt = $item->getData('created_at');
+               $updateAt = $item->getData('updated_at');
            }
         }
         $sendTo = array(
@@ -141,6 +142,12 @@ class Magestore_Abandoned_Model_Cron extends Varien_Object
                         'sender_name' => $senderEmailConfig['name'],
                         'remind_value' => $remindValue,
                         'customer_name' => $recipient['name'],
+                        'number' => $number,
+                        'subtotal' => $base_total,
+                        'qty' => $qty,
+                        'create_at' => $createAt,
+                        'updated_at' => $updateAt
+
                     )
                 );
         }
