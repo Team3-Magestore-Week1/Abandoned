@@ -28,6 +28,8 @@
  */
 class Magestore_Abandoned_Model_Cron extends Varien_Object
 {
+    const XML_PATH_ADMIN_EMAIL_IDENTITY = 'trans_email/ident_general';
+
     public function run(){
         $remindConfig = Mage::getStoreConfig('abandoned/general/discount_config');
         $remindConfig = unserialize($remindConfig);
@@ -53,12 +55,10 @@ class Magestore_Abandoned_Model_Cron extends Varien_Object
                 ->addFieldToFilter('status', Magestore_Abandoned_Model_Configonoff::STATUS_ENABLE)
                 ->getColumnValues('emailcustomer');
         if(count($abandoned)>0)
-            $collectionNin->addFieldToFilter('main_table.entity_id', 
+            $collectionNin->addFieldToFilter('main_table.entity_id',
                     array('nin'=>$abandoned)
             );
-        
-        $this->abandoned($collectionNin);
-        
+        $this->abandoned($collectionNin, $remindConfig);
         $collectionIn = Mage::getResourceModel('reports/quote_collection');
         $collectionIn->prepareForAbandonedReport();
         $collectionIn->getSelect()->columns(
@@ -75,10 +75,10 @@ class Magestore_Abandoned_Model_Cron extends Varien_Object
                 . ' AND abandoned.remind_num < '.$maxCountRemind
                 . ' AND DATE_ADD(abandoned.last_remind_time, INTERVAL '.$remindTime.' DAY) <= "'.$now.'"'
         );
-        $this->abandoned($collectionIn);
+        $this->abandoned($collectionIn, $remindConfig);
     }
     
-    public function abandoned($collection = null){
+    public function abandoned($collection = null, $remindConfig){
         if(!$collection)
             return;
         foreach($collection as $item){
@@ -86,15 +86,82 @@ class Magestore_Abandoned_Model_Cron extends Varien_Object
                     ->addFieldToFilter('quote_id', $item->getEntityId())
                     ->getFirstItem();
             $model->saveAbandoned($item);
-            $this->sendEmail($item, $model);
+            $this->sendEmail($item, $model, $remindConfig);
             $this->sendSms($item, $model);
         }
     }
-    
-    public function sendEmail($item, $model){
-        
+
+    public function sendEmail($item, $model, $remindConfig){
+        if (!Mage::helper('abandoned')->isAbandonedEnabled()){
+            return;
+        }
+        $customerId = $item->getData('customer_id');
+        $customer = Mage::getModel('customer/customer');
+        if ($customerId) {
+            $customer->load($customerId);
+        }
+         $quote = Mage::getModel('sales/quote')
+             ->load($item->getEntityId());
+        if ($quote->getId()) {
+            $collection = $quote->getItemsCollection(false);
+        }
+
+
+        foreach($collection as $item){
+            $product = Mage::getModel('catalog/product')->load($item['product_id']);
+        }
+
+
+
+        $currency = Mage::app()->getStore()->getBaseCurrency();
+        $senderEmailConfig = $this->getEmailContact();
+
+        $translate = Mage::getSingleton('core/translate');
+        $translate->setTranslateInline(false);
+        foreach($remindConfig as $remind){
+           if($model->getData('remind_num') == $remind['number']){
+              $remindValue = $remind['value'];
+               $template = $remind['email_template'];
+           }
+        }
+        $sendTo = array(
+            array(
+                'email' => $item->getData('customer_email'),
+                'name' => $item->getData('customer_firstname'). ' '.$item->getData('customer_lastname'),
+            )
+        );
+
+        $mailTemplate = Mage::getModel('core/email_template');
+
+        foreach ($sendTo as $recipient) {
+
+            $mailTemplate->setDesignConfig(array('area' => 'frontend'))
+                ->sendTransactional(
+                    $template, $senderEmailConfig, $recipient['email'], $recipient['name'], array(
+                        'sender_name' => $senderEmailConfig['name'],
+                        'remind_value' => $remindValue,
+                        'customer_name' => $recipient['name'],
+                    )
+                );
+        }
+
+        $translate->setTranslateInline(true);
+
+        return $this;
     }
-    
+
+    public  function getEmailContact(){
+
+        $senderDefault = Mage::getStoreConfig(self::XML_PATH_ADMIN_EMAIL_IDENTITY);
+
+                $senderEmailConfig = array(
+                    'email' => $senderDefault['email'],
+                    'name' => $senderDefault['name'],
+                );
+
+        return $senderEmailConfig;
+    }
+
     public function sendSms($item, $model){
         
     }

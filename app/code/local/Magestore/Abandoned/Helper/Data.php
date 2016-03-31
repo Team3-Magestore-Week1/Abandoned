@@ -29,5 +29,11 @@
  */
 class Magestore_Abandoned_Helper_Data extends Mage_Core_Helper_Abstract
 {
-    
+    public function isAbandonedEnabled(){
+            $storeId = Mage::app()->getStore()->getId();
+            if (Mage::getStoreConfig('abandoned/general/enable',$storeId)) {
+                return true;
+            }
+            return false;
+    }
 }

@@ -1,0 +1,104 @@
+<!--@subject {{var store.getFrontendName()}}: Remind to Customer Checkout @-->
+<!--@vars
+{"store url=\"\"":"Store Url",
+"skin url=\"images/logo_email.gif\" _area='frontend'":"Email Logo Image",
+"htmlescape var=$referral.getReferralName()":"Customer Name",
+"store url=\"customer/account/\"":"Customer Account Url",
+"var referral.getEmail()":"Customer Email",
+"htmlescape var=$referral.getPassword()":"Customer Password"}
+@-->
+
+<!--@styles
+body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif; }
+@-->
+
+<div style="font:11px/1.35em Verdana, Arial, Helvetica, sans-serif;">
+    <table cellspacing="0" cellpadding="0" border="0" width="98%" style="margin-top:10px; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif; margin-bottom:10px;">
+        <tr>
+            <td align="center" valign="top">
+                <!-- [ header starts here] -->
+                <table cellspacing="0" cellpadding="0" border="0" width="650">
+                    <tr>
+                        <td valign="top">
+                            <!--edit by Sally-->
+                            <a href="{{store url=''}}"><img src="{{var logo_url}}" alt="{{var store.getFrontendName()}}"  style="margin-bottom:10px;" border="0"/></a></td>
+                    </tr>
+                </table>
+
+                <!-- [ middle starts here] -->
+                <table cellspacing="0" cellpadding="0" border="0" width="650">
+                    <tr>
+                        <td valign="top">
+                            <p><strong>Hi {{var customer_name}}</strong>,<br/>
+                                Thanks for joining the {{var store.getFrontendName()}} <a href="{{store url=''}}">My website!</a><br/>
+                                We have sent this email to remind you checkout with a service discount {{var remind_value}}%.<br/>
+                                To login to our system, please click <a href="{{store url='customer/account/login'}}">Login</a>  at the top right of every page in our shop.</p>
+                            <br/>
+                            <br/>
+                            <p>Your quote information is below.</p>
+                            <br/>
+                            <table class="data" id="customer_cart_grid1_table" cellspacing="0" border="1">
+                                <colgroup><col width="100">
+                                    <col>
+                                    <col width="100">
+                                    <col width="60">
+                                    <col width="100">
+                                    <col width="100">
+                                    <col width="100">
+                                    <col>
+                                </colgroup>
+                                <thead>
+                                    <tr class="headings">
+                                        <th><span class="nobr"><a href="#" name="customer_name" title="asc" class="not-sort"><span class="sort-title">Customer Name</span></a></span></th>
+                                        <th><span class="nobr"><a href="#" name="email" title="asc" class="not-sort"><span class="sort-title">Email</span></a></span></th>
+                                        <th><span class="nobr"><a href="#" name="number_of_item" title="asc" class="not-sort"><span class="sort-title">Number of Items</span></a></span></th>
+                                        <th><span class="nobr"><a href="#" name="qty" title="asc" class="not-sort"><span class="sort-title">Quantity of Items</span></a></span></th>
+                                        <th><span class="nobr"><a href="#" name="subtotal" title="asc" class="not-sort"><span class="sort-title">Subtotal</span></a></span></th>
+                                        <th><span class="nobr"><a href="#" name="createA" title="asc" class="not-sort"><span class="sort-title">Created At</span></a></span></th>
+                                        <th><span class="nobr"><a href="#" name="price" title="asc" class="not-sort"><span class="sort-title">Updated At</span></a></span></th>
+                                    </tr>
+                            </thead>
+                                <tbody>
+                                <tr class="even pointer" title="abandoned cart">
+                                    <td class=" ">
+                                        {{var customer_name}}
+                                    </td>
+
+                                    <!--<td class=" ">-->
+                                        <!--<div class="">-->
+                                            <!--<strong>{{var customer_email}}</strong>-->
+                                        <!--</div>-->
+                                    <!--</td>-->
+
+
+                                    <!--<td class=" ">-->
+                                        <!--{{var number_of_item}}-->
+                                    <!--</td>-->
+                                    <!--<td class=" a-right ">-->
+                                        <!--{{var qty}}-->
+                                    <!--</td>-->
+                                    <!--<td class=" a-right ">-->
+                                        <!--{{var base_total}}-->
+                                    <!--</td>-->
+                                    <!--<td class=" a-right ">-->
+                                        <!--{{var create_time}}-->
+                                    <!--</td>-->
+                                    <!--<td class=" a-right ">-->
+                                        <!--{{var updated_time}}-->
+                                    <!--</td>-->
+                                </tr>
+                                </tbody>
+
+                            </table>
+                            <p>
+                                Thank you for choosing to work with {{var store.getFrontendName()}}. If you have any questions about your account, or any other matters, please feel free to contact us at <a href="mailto:{{config path='trans_email/ident_support/email'}}">{{config path='trans_email/ident_support/email'}}</a>  or call us within the working time (Monday - Friday, 8 a.m. - 5 p.m. PST).
+                            </p>
+                            <br/>
+                            <p>Thanks again,<br/><strong>{{var sender_name}}</strong></p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</div>
